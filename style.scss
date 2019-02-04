@@ -27,8 +27,13 @@ main{
             display: inline-block;
             margin-right: 20px;
             margin-bottom: 20px;
+
+             .content{
+                 display: none;
+             }
             
         }
+       
     }
 
 }

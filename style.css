@@ -29,4 +29,8 @@ body main #coinsDiv .card {
   margin-right: 20px;
   margin-bottom: 20px;
 }
+
+body main #coinsDiv .card .content {
+  display: none;
+}
 /*# sourceMappingURL=style.css.map */
