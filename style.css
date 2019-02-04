@@ -1,0 +1,32 @@
+body header {
+  background-color: black;
+}
+
+body header #searchInp {
+  float: right;
+  height: 40px;
+}
+
+body ul {
+  display: inline-block;
+  margin-bottom: 0;
+  margin-top: 16px;
+}
+
+body li {
+  color: aliceblue;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+body main #coinsDiv {
+  margin-top: 20px;
+  text-align: center;
+}
+
+body main #coinsDiv .card {
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+/*# sourceMappingURL=style.css.map */
