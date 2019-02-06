@@ -1,26 +1,26 @@
 $(document).ready(function () {
     var arr = [];
-/****** Ajax Progress Bar Functions******/
-    $(document).ajaxStart(function(){
+    /****** Ajax Progress Bar Functions******/
+    $(document).ajaxStart(function () {
         $("#ProgressBar").html(`<div class="d-flex justify-content-center">
                                 <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
                                 </div>
                             </div>`);
-      });
+    });
 
-      $(document).ajaxComplete(function(){
-                            $("#ProgressBar").html(`<div></div>`);
-      });
+    $(document).ajaxComplete(function () {
+        $("#ProgressBar").html(`<div></div>`);
+    });
 
-      /******End Ajax Progress Bar Functions******/
+    /******End Ajax Progress Bar Functions******/
 
-      /****** Ajax Homepage Append Coins******/
+    /****** Ajax Homepage Append Coins******/
     $.ajax({
 
         type: "GET",
         url: "https://api.coingecko.com/api/v3/coins/list",
-       
+
 
 
         success: function (resualt) {
@@ -45,38 +45,82 @@ $(document).ready(function () {
             /****** More Info Button******/
 
             $(".collapsible").on("click", function (event) {
-
-                const element = event.target.parentElement.children[3]
-                $(element).toggle("slow")
+                let ClickDate = new Date()
+                let ClickMinutes = ClickDate.getMinutes()
                 let coinID = event.target.classList[3]
-
-                // console.log(event.target.classList[3])
-
-                /****** Ajax More Info Request******/
-
-
-                $.ajax({
-
-                    type: "GET",
-                    url: `https://api.coingecko.com/api/v3/coins/${coinID}`,
-
-                    success: function (resualt) {
-                        if (resualt.id == coinID) {
-                            $(`p.${coinID}`).html(`<div><img src=${resualt.image.small}></br><span>USD: ${resualt.market_data.current_price.usd}$</span></br><span>EURO: ${resualt.market_data.current_price.eur}&#8364</span></br><span>ILS: ${resualt.market_data.current_price.usd}&#8362</span></div>`)
-                            // console.log(resualt.market_data.current_price.usd)
-                        }
-                    },
-                    error: function (resualt) {
-                        alert(`Something went wrong! Please try again. Problem number ${resualt.error}`)/***** Add a resonable message *****/
-                    }
+                let SavedCoin = JSON.parse(localStorage.getItem(`${coinID}`))
+                const TwoMin = 120000;
 
 
 
-                })
-                            /****** End Ajax More Info Request******/
+                if(SavedCoin!==null){
+                    console.log("Not null")
+                }
+                      else{
+                        const element = event.target.parentElement.children[3]
+                        $(element).toggle("slow")
+    
+                        let coinID = event.target.classList[3]
+    
+    
+    
+                        // console.log(coinID)
+    
+                        /****** Ajax More Info Request******/
+    
+    
+                        $.ajax({
+    
+                            type: "GET",
+                            url: `https://api.coingecko.com/api/v3/coins/${coinID}`,
+    
+                            success: function (resualt) {
+                                if (resualt.id == coinID) {
+                                    $(`p.${coinID}`).html(`<div><img src=${resualt.image.small}></br><span>USD: ${resualt.market_data.current_price.usd}$</span></br><span>EURO: ${resualt.market_data.current_price.eur}&#8364</span></br><span>ILS: ${resualt.market_data.current_price.usd}&#8362</span></div>`)
+    
+                                    localStorage.setItem(`${coinID}`, JSON.stringify(resualt))
+                                    // console.log(resualt.market_data.current_price.usd)
+                                }
+                            },
+                            error: function (resualt) {
+                                alert(`Something went wrong! Please try again. Problem number ${resualt.error}`)/***** Add a resonable message *****/
+                            }
+    
+    
+                        
+                        })
+                         /****** End Ajax More Info Request******/
+                }
+
+                // if (SavedCoin !== null) {
+                //     let nowDate = new Date()
+                //     let nowMinutes = nowDate.getMinutes()
+                //     if (nowMinutes - ClickMinutes < 2) {
+
+                //         const element = event.target.parentElement.children[3]
+                //         $(element).toggle("slow")
+                //         let coinID = event.target.classList[3]
+                //         $(coinID).append(SavedCoin.id)
+
+
+                //         $(`p.${coinID} `).html(`<div><img src=${SavedCoin.image.small}></br><span>USD: ${SavedCoin.market_data.current_price.usd}$</span></br > <span>EURO: ${SavedCoin.market_data.current_price.eur}&#8364</span></br><span>ILS: ${SavedCoin.market_data.current_price.usd}&#8362</span></div>`)
+
+
+                //     }
+                // } 
+                // else {
+
+
+
+
+                 
+
+
+
+                    
 
             })
-                        /****** End More Info Button******/
+            /****** End More Info Button******/
 
         },
         error: function (resualt) {
@@ -95,5 +139,4 @@ $(document).ready(function () {
         }
     }
 })
-
 
