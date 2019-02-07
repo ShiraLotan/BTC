@@ -1,5 +1,14 @@
 $(document).ready(function () {
     var arr = [];
+
+    // /***Toggle input true or false****/
+    // $("#toggleinp").on("change", () => {
+    //     if ($(this).is(':checked')) {
+    //         $(this).attr('value', 'true');
+    //     } else {
+    //         $(this).attr('value', 'false');
+    //     }
+    // })
     /****** Ajax Progress Bar Functions******/
     $(document).ajaxStart(function () {
         $("#ProgressBar").html(`<div class="d-flex justify-content-center">
@@ -11,10 +20,14 @@ $(document).ready(function () {
 
     $(document).ajaxComplete(function () {
         $("#ProgressBar").html(`<div></div>`);
+
     });
 
     /******End Ajax Progress Bar Functions******/
-
+    $(document).ajaxSuccess(function () {
+        var AjaxDate = Date.now()
+        return AjaxDate
+    });
     /****** Ajax Homepage Append Coins******/
     $.ajax({
 
@@ -29,7 +42,7 @@ $(document).ready(function () {
                                         <div class="card-body">
                                         <h5 class="card-title">${resualt[i].name}  - ${resualt[i].symbol}</h5>
                                         <label class="switch">
-                                        <input type="checkbox" id="toggleinp" >
+                                        <input type="checkbox" id="toggleinp">
                                         <span class="slider round"></span>
                                         <button href="#" class="btn btn-primary collapsible ${resualt[i].id}" data-toggle="collapse">More Info</button>
                                         <div class="content">
@@ -39,87 +52,78 @@ $(document).ready(function () {
                                     </div>`);
 
                 arr.push(resualt[i].id)
+
+
             }
 
 
             /****** More Info Button******/
 
             $(".collapsible").on("click", function (event) {
-                let ClickDate = new Date()
-                let ClickMinutes = ClickDate.getMinutes()
+                let dateNow = new Date()
+
                 let coinID = event.target.classList[3]
                 let SavedCoin = JSON.parse(localStorage.getItem(`${coinID}`))
+                // console.log(SavedCoin)
+
                 const TwoMin = 120000;
+                // console.log(SavedCoin)
+                // console.log(dateNow)
 
 
+                /********Check if user already clicked the coin *******/
+                if (SavedCoin !== null && dateNow - SavedCoin.AjaxDate < 120000) {
+                    console.log("From Storage")
 
-                if(SavedCoin!==null){
-                    console.log("Not null")
+                    const element = event.target.parentElement.children[3]
+                    $(element).toggle("slow")
+
+                    $(`p.${SavedCoin.id}`).html(`<div><img src=${SavedCoin.image.small}></br><span>USD: ${SavedCoin.market_data.current_price.usd}$</span></br><span>EURO: ${SavedCoin.market_data.current_price.eur}&#8364</span></br><span>ILS: ${SavedCoin.market_data.current_price.usd}&#8362</span></div>`)
+
                 }
-                      else{
-                        const element = event.target.parentElement.children[3]
-                        $(element).toggle("slow")
-    
-                        let coinID = event.target.classList[3]
-    
-    
-    
-                        // console.log(coinID)
-    
-                        /****** Ajax More Info Request******/
-    
-    
-                        $.ajax({
-    
-                            type: "GET",
-                            url: `https://api.coingecko.com/api/v3/coins/${coinID}`,
-    
-                            success: function (resualt) {
-                                if (resualt.id == coinID) {
-                                    $(`p.${coinID}`).html(`<div><img src=${resualt.image.small}></br><span>USD: ${resualt.market_data.current_price.usd}$</span></br><span>EURO: ${resualt.market_data.current_price.eur}&#8364</span></br><span>ILS: ${resualt.market_data.current_price.usd}&#8362</span></div>`)
-    
-                                    localStorage.setItem(`${coinID}`, JSON.stringify(resualt))
-                                    // console.log(resualt.market_data.current_price.usd)
-                                }
-                            },
-                            error: function (resualt) {
-                                alert(`Something went wrong! Please try again. Problem number ${resualt.error}`)/***** Add a resonable message *****/
+
+                /********End Check if user already clicked the coin *******/
+
+                else {
+                    /********Take info from API if user not clicked the coin *******/
+
+                    const element = event.target.parentElement.children[3]
+                    $(element).toggle("slow")
+                    let coinID = event.target.classList[3]
+
+                    /****** Ajax More Info Request******/
+                    $.ajax({
+
+                        type: "GET",
+                        url: `https://api.coingecko.com/api/v3/coins/${coinID}`,
+
+
+                        success: function (resualt) {
+
+                            if (resualt.id == coinID) {
+                                $(`p.${coinID}`).html(`<div><img src=${resualt.image.small}></br><span>USD: ${resualt.market_data.current_price.usd}$</span></br><span>EURO: ${resualt.market_data.current_price.eur}&#8364</span></br><span>ILS: ${resualt.market_data.current_price.usd}&#8362</span></div>`)
+
+                                resualt.AjaxDate = Date.now()
+
+                                localStorage.setItem(`${coinID}`, JSON.stringify(resualt))
+
+                                console.log("From Ajax")
+
                             }
-    
-    
-                        
-                        })
-                         /****** End Ajax More Info Request******/
+                        },
+
+                        error: function (resualt) {
+                            alert(`Something went wrong! Please try again. Problem number ${resualt.error}`)/***** Add a resonable message *****/
+                        }
+
+
+
+                    })
+                    /****** End Ajax More Info Request******/
                 }
-
-                // if (SavedCoin !== null) {
-                //     let nowDate = new Date()
-                //     let nowMinutes = nowDate.getMinutes()
-                //     if (nowMinutes - ClickMinutes < 2) {
-
-                //         const element = event.target.parentElement.children[3]
-                //         $(element).toggle("slow")
-                //         let coinID = event.target.classList[3]
-                //         $(coinID).append(SavedCoin.id)
-
-
-                //         $(`p.${coinID} `).html(`<div><img src=${SavedCoin.image.small}></br><span>USD: ${SavedCoin.market_data.current_price.usd}$</span></br > <span>EURO: ${SavedCoin.market_data.current_price.eur}&#8364</span></br><span>ILS: ${SavedCoin.market_data.current_price.usd}&#8362</span></div>`)
-
-
-                //     }
-                // } 
-                // else {
-
-
-
-
-                 
-
-
-
-                    
 
             })
+
             /****** End More Info Button******/
 
         },
@@ -131,12 +135,5 @@ $(document).ready(function () {
 
     })
 
-    function inpCheckBox() {
-        if ($('input[type=checkbox]').prop("checked", true)) {
-            console.log("ok")
-        } else {
-            console.log("Not ok")
-        }
-    }
 })
 
