@@ -1,40 +1,40 @@
 body{
-header {
-    background-color: black;
-    
-    
-    #searchInp{
-        float:right;
-        height: 40px;
-    }
-        }ul {
-            display: inline-block;
-            margin-bottom: 0;
-            margin-top:16px;
+    header {
+        background-color: black;
+        
+        
+        #searchInp{
+            float:right;
+            height: 40px;
+        }
+            }ul {
+                display: inline-block;
+                margin-bottom: 0;
+                margin-top:16px;
 
-                } li{
-                    color: aliceblue;
-                    display: inline-block;
-                    margin-right:20px;
+                    } li{
+                        color: aliceblue;
+                        display: inline-block;
+                        margin-right:20px;
 
 
+                    }
+    main{
+        #coinsDiv{
+            margin-top: 20px;
+            text-align: center;
+            .card{
+                display: inline-block;
+                margin-right: 20px;
+                margin-bottom: 20px;
+
+                .content{
+                    display: none;
                 }
-main{
-    #coinsDiv{
-        margin-top: 20px;
-        text-align: center;
-        .card{
-            display: inline-block;
-            margin-right: 20px;
-            margin-bottom: 20px;
-
-             .content{
-                 display: none;
-             }
-            
+                
+            }
+        
         }
        
-    }
-
 }
 }

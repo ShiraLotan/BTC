@@ -1,14 +1,8 @@
 $(document).ready(function () {
     var arr = [];
+    var favorite = [];
 
-    // /***Toggle input true or false****/
-    // $("#toggleinp").on("change", () => {
-    //     if ($(this).is(':checked')) {
-    //         $(this).attr('value', 'true');
-    //     } else {
-    //         $(this).attr('value', 'false');
-    //     }
-    // })
+
     /****** Ajax Progress Bar Functions******/
     $(document).ajaxStart(function () {
         $("#ProgressBar").html(`<div class="d-flex justify-content-center">
@@ -42,7 +36,7 @@ $(document).ready(function () {
                                         <div class="card-body">
                                         <h5 class="card-title">${resualt[i].name}  - ${resualt[i].symbol}</h5>
                                         <label class="switch">
-                                        <input type="checkbox" id="toggleinp">
+                                        <input type="checkbox" id="checkbox">
                                         <span class="slider round"></span>
                                         <button href="#" class="btn btn-primary collapsible ${resualt[i].id}" data-toggle="collapse">More Info</button>
                                         <div class="content">
@@ -55,6 +49,37 @@ $(document).ready(function () {
 
 
             }
+            /***Toggle input true or false****/
+            $("input").on("change", function () {
+                if ($(this).is(':checked')) {
+                    $(this).attr('value', 'true');
+
+                    let CardFavorite = event.srcElement.parentElement.children[2].classList[3];
+                    console.log(favorite)
+
+
+                    if (favorite.length <5 ) {
+                        favorite.push(CardFavorite)
+
+                        
+                    } else{
+                        /****************modal test *********************/
+                       
+                        /****************modal test *********************/
+                    }
+
+
+
+                } else {
+                    $(this).attr('value', 'false');
+                    console.log("False")
+
+                }
+
+
+            })
+            ///***End Toggle input true or false****/
+
 
 
             /****** More Info Button******/
@@ -64,7 +89,7 @@ $(document).ready(function () {
 
                 let coinID = event.target.classList[3]
                 let SavedCoin = JSON.parse(localStorage.getItem(`${coinID}`))
-                // console.log(SavedCoin)
+                // console.log(coinID)
 
                 const TwoMin = 120000;
                 // console.log(SavedCoin)
@@ -85,6 +110,7 @@ $(document).ready(function () {
                 /********End Check if user already clicked the coin *******/
 
                 else {
+
                     /********Take info from API if user not clicked the coin *******/
 
                     const element = event.target.parentElement.children[3]
@@ -134,6 +160,7 @@ $(document).ready(function () {
 
 
     })
+
 
 })
 
