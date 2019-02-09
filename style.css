@@ -33,4 +33,8 @@ body main #coinsDiv .card {
 body main #coinsDiv .card .content {
   display: none;
 }
+
+body main #ex1 #modalContent div#CoinModalDiv {
+  color: red !important;
+}
 /*# sourceMappingURL=style.css.map */

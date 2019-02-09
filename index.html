@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
     <script src="script.js"></script>
 
 </head>
@@ -34,7 +37,18 @@
 
         </div>
 
-       
+
+
+
+        <!----Modal----->
+        <div id="ex1" class="modal" >
+                <h1>Please Choose Five Coins Only</h1>
+               <p id="modalContent" > </p>
+            <a href="#" rel="modal:close">Close</a>
+        </div>
+        <a id="modallink" href="#ex1" rel="modal:open"></a>
+        <!----End Modal----->
+
 
     </main>
 

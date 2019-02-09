@@ -55,24 +55,59 @@ $(document).ready(function () {
                     $(this).attr('value', 'true');
 
                     let CardFavorite = event.srcElement.parentElement.children[2].classList[3];
-                    console.log(favorite)
+                    // console.log(favorite)
 
 
-                    if (favorite.length <5 ) {
+                    if (favorite.length < 5) {
                         favorite.push(CardFavorite)
 
-                        
-                    } else{
-                        /****************modal test *********************/
-                       
-                        /****************modal test *********************/
+
+                    } else {
+                        /****************Modal window *********************/
+                        // console.log(this.parentElement.children[3].children[0].classList[0])
+
+                        let currentCoin = this.parentElement.children[3].children[0].classList[0];
+                        $("#modalContent").html(`If you would like to add coin name: ${currentCoin} please uncheck one coine instead:`)
+                        for (let i = 0; i < favorite.length; i++) {
+                            $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}<input type="checkbox" id="inpChbx" checked></div>`)
+
+                        }
+                        // $("#modalContent").append(`<div id="CoinModalDiv">${currentCoin}<input type="checkbox"></div>`)
+
+                        $("#modallink").click()
+
+                        $("input").on("change", function () {
+                            let removeCoin = this.parentElement.classList[0]
+
+
+                           for (let i = 0; i < favorite.length; i++) {
+                                if (removeCoin == favorite[i]) {
+                                    var index = i
+                                    favorite.splice(index,1)
+                                
+                                    alert(`${removeCoin} Has Been Removed`)
+
+                                }
+                            }
+
+                            // console.log(currentCoin)
+                               
+
+                            // $("#modallink").on("click",function(){
+                            //     alert("ok")
+                            // })
+
+                        })
+
+
+                        /**************** End Modal window *********************/
                     }
 
 
 
                 } else {
                     $(this).attr('value', 'false');
-                    console.log("False")
+                    // console.log("False")
 
                 }
 
@@ -160,7 +195,6 @@ $(document).ready(function () {
 
 
     })
-
 
 })
 
