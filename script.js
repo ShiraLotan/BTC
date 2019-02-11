@@ -36,7 +36,7 @@ $(document).ready(function () {
                                         <div class="card-body">
                                         <h5 class="card-title">${resualt[i].name}  - ${resualt[i].symbol}</h5>
                                         <label class="switch">
-                                        <input type="checkbox" id="checkbox">
+                                        <input type="checkbox" id="checkbox" class="${resualt[i].id}">
                                         <span class="slider round"></span>
                                         <button href="#" class="btn btn-primary collapsible ${resualt[i].id}" data-toggle="collapse">More Info</button>
                                         <div class="content">
@@ -84,23 +84,32 @@ $(document).ready(function () {
                                 if (removeCoin == favorite[i]) {
                                     var index = i
                                     favorite.splice(index,1)
-                                
+                                    favorite.push(currentCoin)
                                     alert(`${removeCoin} Has Been Removed`)
+                                    $("#AcloseModal").click()
 
+                                    let removedElement =   $(`input#checkbox.${removeCoin}:checked`)
+
+                                    $(removedElement).prop('checked', false)
+
+
+                                    // console.log(removedElement)
                                 }
+
+                            
+
                             }
 
-                            // console.log(currentCoin)
-                               
+                      
+                        //    $(`#${removeCoin}`).removeAttr("checked")
 
-                            // $("#modallink").on("click",function(){
-                            //     alert("ok")
-                            // })
+                        
 
                         })
 
 
                         /**************** End Modal window *********************/
+                        
                     }
 
 
