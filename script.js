@@ -1,6 +1,8 @@
 $(document).ready(function () {
     var arr = [];
     var favorite = [];
+    var FavoriteSymbols = [];
+
 
 
     /****** Ajax Progress Bar Functions******/
@@ -36,7 +38,7 @@ $(document).ready(function () {
                                         <div class="card-body">
                                         <h5 class="card-title">${resualt[i].name}  - ${resualt[i].symbol}</h5>
                                         <label class="switch">
-                                        <input type="checkbox" id="checkbox" class="${resualt[i].id}">
+                                        <input type="checkbox" id="checkbox" class="${resualt[i].id}" value="false">
                                         <span class="slider round"></span>
                                         <button href="#" class="btn btn-primary collapsible ${resualt[i].id}" data-toggle="collapse">More Info</button>
                                         <div class="content">
@@ -45,14 +47,24 @@ $(document).ready(function () {
                                         </div>
                                     </div>`);
 
-                arr.push(resualt[i].id)
+                arr.push(obj(resualt[i].id, resualt[i].symbol))
 
 
             }
+            
             /***Toggle input true or false****/
             $("input").on("change", function () {
                 if ($(this).is(':checked')) {
-                    $(this).attr('value', 'true');
+                    $(this).attr('value', 'true')
+
+
+
+                    // $("input").on("change",function(){
+                    //     if($(this).attr('value', 'true')){
+                    //         $(this).attr('value', 'false')
+                    //     }
+
+                    // })
 
                     let CardFavorite = event.srcElement.parentElement.children[2].classList[3];
                     // console.log(favorite)
@@ -61,7 +73,21 @@ $(document).ready(function () {
                     if (favorite.length < 5) {
                         favorite.push(CardFavorite)
 
-
+                        $('input[type=checkbox]').click(function(){ 
+                            if($(this).is(":not(:checked)"))
+                            {
+                                $(this).prop('value','false') ; 
+                           }
+                           let coinOut = this.classList[0]
+                           for(let i=0;i<favorite.length;i++){
+                               if(coinOut==favorite[i]){
+                                   let index = i
+                                   favorite.splice(index,1)
+                               }
+                           }
+                        //    console.log(coinOut)
+                        })
+                        // console.log(favorite)
                     } else {
                         /****************Modal window *********************/
                         // console.log(this.parentElement.children[3].children[0].classList[0])
@@ -72,56 +98,54 @@ $(document).ready(function () {
                             $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}<input type="checkbox" id="inpChbx" checked></div>`)
 
                         }
-                        // $("#modalContent").append(`<div id="CoinModalDiv">${currentCoin}<input type="checkbox"></div>`)
 
                         $("#modallink").click()
+
+                        $(".close-modal").on("click", function () {
+                            //   console.log(currentCoin)
+
+                            $(`input:checkbox.${currentCoin}`).prop('checked', false)
+                        })
 
                         $("input").on("change", function () {
                             let removeCoin = this.parentElement.classList[0]
 
-
-                           for (let i = 0; i < favorite.length; i++) {
+                            for (let i = 0; i < favorite.length; i++) {
                                 if (removeCoin == favorite[i]) {
                                     var index = i
-                                    favorite.splice(index,1)
+                                    favorite.splice(index, 1)
                                     favorite.push(currentCoin)
+                                    // console.log(favorite)
+
                                     alert(`${removeCoin} Has Been Removed`)
                                     $("#AcloseModal").click()
 
-                                    let removedElement =   $(`input#checkbox.${removeCoin}:checked`)
+                                    let removedElement = $(`input#checkbox.${removeCoin}:checked`)
 
                                     $(removedElement).prop('checked', false)
 
 
                                     // console.log(removedElement)
                                 }
-
-                            
-
                             }
-
-                      
-                        //    $(`#${removeCoin}`).removeAttr("checked")
-
-                        
-
                         })
-
-
                         /**************** End Modal window *********************/
-                        
+
                     }
 
 
 
                 } else {
-                    $(this).attr('value', 'false');
-                    // console.log("False")
+                    // $(input).on("change",function(){
+                    //     $(this).attr('value','false')
+                    // })
 
                 }
 
 
             })
+
+
             ///***End Toggle input true or false****/
 
 
@@ -133,7 +157,7 @@ $(document).ready(function () {
 
                 let coinID = event.target.classList[3]
                 let SavedCoin = JSON.parse(localStorage.getItem(`${coinID}`))
-                // console.log(coinID)
+                console.log(event)
 
                 const TwoMin = 120000;
                 // console.log(SavedCoin)
@@ -205,5 +229,212 @@ $(document).ready(function () {
 
     })
 
+    $("#realTimeReports").on("click", function () {
+
+        $.ajax({
+            type: "GET",
+            url: "RealTimeReports.html",
+
+            success: function (resualt) {
+                $(".card").remove()
+                $("#coinsDiv").append(resualt)
+
+                for (let i = 0; i < arr.length; i++) {
+
+                    for (let j = 0; j < favorite.length; j++) {
+                        if (favorite[j] === arr[i].id) {
+                            let index = j
+                            FavoriteSymbols.push(arr[index].symbol)
+
+                        }
+                    }
+                }
+                
+                /*******Start Coins Table ******/
+                $(document).ready(function(){
+
+                $.ajax({
+                    type: "GET",
+                    url: `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${FavoriteSymbols[0]},${FavoriteSymbols[1]},${FavoriteSymbols[2]},${FavoriteSymbols[3]},${FavoriteSymbols[4]}&tsyms=USD`,
+
+                    success: function (resualt) {
+                        console.log(resualt)
+
+
+                        /******CHART ********/
+
+                            var options = {
+                                exportEnabled: true,
+                                animationEnabled: true,
+                                title:{
+                                    text: "Live Online Traded Coins Prices"
+                                },
+                                
+                                axisX: {
+                                    title: "Time"
+                                },
+                                axisY: {
+                                    title: "Price",
+                                    titleFontColor: "#4F81BC",
+                                    lineColor: "#4F81BC",
+                                    labelFontColor: "#4F81BC",
+                                    tickColor: "#4F81BC",
+                                    includeZero: false
+                                },
+                                
+                                toolTip: {
+                                    shared: true
+                                },
+                                legend: {
+                                    cursor: "pointer",
+                                    itemclick: toggleDataSeries
+                                },
+
+                                data: [{
+                                    type: "spline",
+                                    name: resualt[0],
+                                    showInLegend: true,
+                                    xValueFormatString: "MMM YYYY",
+                                    yValueFormatString: "#,##0 Units",
+                                    dataPoints: [
+                                        { x: new Date(2016, 0, 1),  y: 120 },
+                                        { x: new Date(2016, 1, 1), y: 135 },
+                                        { x: new Date(2016, 2, 1), y: 144 },
+                                        { x: new Date(2016, 3, 1),  y: 103 },
+                                        { x: new Date(2016, 4, 1),  y: 93 },
+                                        { x: new Date(2016, 5, 1),  y: 129 },
+                                        { x: new Date(2016, 6, 1), y: 143 },
+                                        { x: new Date(2016, 7, 1), y: 156 },
+                                        { x: new Date(2016, 8, 1),  y: 122 },
+                                        { x: new Date(2016, 9, 1),  y: 106 },
+                                        { x: new Date(2016, 10, 1),  y: 137 },
+                                        { x: new Date(2016, 11, 1), y: 142 }
+                                    ]
+                                },
+                                {
+                                    type: "spline",
+                                    name: resualt[1],
+                                    axisYType: "secondary",
+                                    showInLegend: true,
+                                    xValueFormatString: "MMM YYYY",
+                                    yValueFormatString: "$#,##0.#",
+                                    dataPoints: [
+                                        { x: new Date(2016, 0, 1),  y: 19034.5 },
+                                        { x: new Date(2016, 1, 1), y: 20015 },
+                                        { x: new Date(2016, 2, 1), y: 27342 },
+                                        { x: new Date(2016, 3, 1),  y: 20088 },
+                                        { x: new Date(2016, 4, 1),  y: 20234 },
+                                        { x: new Date(2016, 5, 1),  y: 29034 },
+                                        { x: new Date(2016, 6, 1), y: 30487 },
+                                        { x: new Date(2016, 7, 1), y: 32523 },
+                                        { x: new Date(2016, 8, 1),  y: 20234 },
+                                        { x: new Date(2016, 9, 1),  y: 27234 },
+                                        { x: new Date(2016, 10, 1),  y: 33548 },
+                                        { x: new Date(2016, 11, 1), y: 32534 }
+                                    ]
+                                },
+                                {
+                                    type: "spline",
+                                    name: resualt[2],
+                                    axisYType: "secondary",
+                                    showInLegend: true,
+                                    xValueFormatString: "MMM YYYY",
+                                    yValueFormatString: "$#,##0.#",
+                                    dataPoints: [
+                                        { x: new Date(2016, 0, 1),  y: 19034.5 },
+                                        { x: new Date(2016, 1, 1), y: 20015 },
+                                        { x: new Date(2016, 2, 1), y: 27342 },
+                                        { x: new Date(2016, 3, 1),  y: 20088 },
+                                        { x: new Date(2016, 4, 1),  y: 20234 },
+                                        { x: new Date(2016, 5, 1),  y: 29034 },
+                                        { x: new Date(2016, 6, 1), y: 30487 },
+                                        { x: new Date(2016, 7, 1), y: 32523 },
+                                        { x: new Date(2016, 8, 1),  y: 20234 },
+                                        { x: new Date(2016, 9, 1),  y: 27234 },
+                                        { x: new Date(2016, 10, 1),  y: 33548 },
+                                        { x: new Date(2016, 11, 1), y: 32534 }
+                                    ]
+                                },
+                                {
+                                    type: "spline",
+                                    name: resualt[3],
+                                    axisYType: "secondary",
+                                    showInLegend: true,
+                                    xValueFormatString: "MMM YYYY",
+                                    yValueFormatString: "$#,##0.#",
+                                    dataPoints: [
+                                        { x: new Date(2016, 0, 1),  y: 19034.5 },
+                                        { x: new Date(2016, 1, 1), y: 20015 },
+                                        { x: new Date(2016, 2, 1), y: 27342 },
+                                        { x: new Date(2016, 3, 1),  y: 20088 },
+                                        { x: new Date(2016, 4, 1),  y: 20234 },
+                                        { x: new Date(2016, 5, 1),  y: 29034 },
+                                        { x: new Date(2016, 6, 1), y: 30487 },
+                                        { x: new Date(2016, 7, 1), y: 32523 },
+                                        { x: new Date(2016, 8, 1),  y: 20234 },
+                                        { x: new Date(2016, 9, 1),  y: 27234 },
+                                        { x: new Date(2016, 10, 1),  y: 33548 },
+                                        { x: new Date(2016, 11, 1), y: 32534 }
+                                    ]
+                                },
+                                {
+                                    type: "spline",
+                                    name: resualt[4],
+                                    axisYType: "secondary",
+                                    showInLegend: true,
+                                    xValueFormatString: "MMM YYYY",
+                                    yValueFormatString: "$#,##0.#",
+                                    dataPoints: [
+                                        { x: new Date(2016, 0, 1),  y: 19034.5 },
+                                        { x: new Date(2016, 1, 1), y: 20015 },
+                                        { x: new Date(2016, 2, 1), y: 27342 },
+                                        { x: new Date(2016, 3, 1),  y: 20088 },
+                                        { x: new Date(2016, 4, 1),  y: 20234 },
+                                        { x: new Date(2016, 5, 1),  y: 29034 },
+                                        { x: new Date(2016, 6, 1), y: 30487 },
+                                        { x: new Date(2016, 7, 1), y: 32523 },
+                                        { x: new Date(2016, 8, 1),  y: 20234 },
+                                        { x: new Date(2016, 9, 1),  y: 27234 },
+                                        { x: new Date(2016, 10, 1),  y: 33548 },
+                                        { x: new Date(2016, 11, 1), y: 32534 }
+                                    ]
+                                }]
+                            };
+                            $("#chartContainer").CanvasJSChart(options);
+                            
+                            function toggleDataSeries(e) {
+                                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                                    e.dataSeries.visible = false;
+                                } else {
+                                    e.dataSeries.visible = true;
+                                }
+                                e.chart.render();
+                            }
+                            
+                            
+                        /******End CHART *********/
+                    }
+                })
+            })
+                /*******End Start Coins Table ******/
+
+
+
+
+
+
+            },
+            error: function (resualt) {
+                alert("Something Went Wrong! Please use Live Server or try again later ")
+            }
+        })
+    })
+    function obj(id, symbol) {
+        var obj = {
+            'id': id,
+            'symbol': symbol.toUpperCase()
+        }
+        return obj
+    }
 })
 
