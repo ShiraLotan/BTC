@@ -1,26 +1,68 @@
 body{
-   
+    background-image: url("./1.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .fa-angle-down{
+        color:white;
+        font-size:   130px;  
+        margin-left:46%;
+        margin-top: 350px;
+        animation: blinker 2s linear infinite;
+
+    }
+            @keyframes blinker {
+                20% {
+                opacity: 0;
+                }
+            }
+
+    #MainHeader{
+        text-align: center;
+        background-color: transparent;
+        color: white;
+        font-size: 140px;
+        text-shadow: 12px 2px 18px rgb(99, 89, 89);
+
+    }
     header {
         background-color: black;
-        
+
+        div.divTopBar{
+
+            ul {
+                    display: inline-block;
+                    margin-bottom: 0;
+                    margin-top:16px;
+
+                        } 
+                        li{
+                            color: aliceblue;
+                            display: inline-block;
+                            margin-right:20px;
+
+                            
+                        }
+            } 
+
+        .fa-search{
+            color: white;
+            float: right;
+            margin-top: 13px;
+            margin-right:13px;
+            &:hover {
+                color:rgb(200, 201, 202);
+            }
+        }
         
         #searchInp{
             float:right;
             height: 40px;
         }
-            }ul {
-                display: inline-block;
-                margin-bottom: 0;
-                margin-top:16px;
-
-                    } li{
-                        color: aliceblue;
-                        display: inline-block;
-                        margin-right:20px;
-
-                        
-                    }
-                    
+            }
+               
                     
     main{
         #coinsDiv{
@@ -47,5 +89,21 @@ body{
             }
         }
 }
+main{
+    #coinsDiv{
+        .card{
+            height: 150px;;
+            background-color: rgb(228, 231, 235);
+            border: 4px solid black;
+            border-radius: 8px;
 
+            button{
+                background-color: green;
+                border: none;
+                margin-top: 20px;
+            }
+        }
+
+    }
+}
 }

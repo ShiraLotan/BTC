@@ -1,22 +1,70 @@
+body {
+  background-image: url("./1.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body .fa-angle-down {
+  color: white;
+  font-size: 130px;
+  margin-left: 46%;
+  margin-top: 350px;
+  -webkit-animation: blinker 2s linear infinite;
+          animation: blinker 2s linear infinite;
+}
+
+@-webkit-keyframes blinker {
+  20% {
+    opacity: 0;
+  }
+}
+
+@keyframes blinker {
+  20% {
+    opacity: 0;
+  }
+}
+
+body #MainHeader {
+  text-align: center;
+  background-color: transparent;
+  color: white;
+  font-size: 140px;
+  text-shadow: 12px 2px 18px #635959;
+}
+
 body header {
   background-color: black;
 }
 
-body header #searchInp {
-  float: right;
-  height: 40px;
-}
-
-body ul {
+body header div.divTopBar ul {
   display: inline-block;
   margin-bottom: 0;
   margin-top: 16px;
 }
 
-body li {
+body header div.divTopBar li {
   color: aliceblue;
   display: inline-block;
   margin-right: 20px;
+}
+
+body header .fa-search {
+  color: white;
+  float: right;
+  margin-top: 13px;
+  margin-right: 13px;
+}
+
+body header .fa-search:hover {
+  color: #c8c9ca;
+}
+
+body header #searchInp {
+  float: right;
+  height: 40px;
 }
 
 body main #coinsDiv {
@@ -36,5 +84,18 @@ body main #coinsDiv .card .content {
 
 body main #ex1 #modalContent div#CoinModalDiv {
   color: red !important;
+}
+
+body main #coinsDiv .card {
+  height: 150px;
+  background-color: #e4e7eb;
+  border: 4px solid black;
+  border-radius: 8px;
+}
+
+body main #coinsDiv .card button {
+  background-color: green;
+  border: none;
+  margin-top: 20px;
 }
 /*# sourceMappingURL=style.css.map */
