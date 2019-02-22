@@ -79,6 +79,10 @@ body header #searchInp {
   border-color: black;
 }
 
+body main div.modal {
+  background-color: red !important;
+}
+
 body main #coinsDiv {
   margin-top: 20px;
   text-align: center;
@@ -92,10 +96,6 @@ body main #coinsDiv .card {
 
 body main #coinsDiv .card .content {
   display: none;
-}
-
-body main #ex1 #modalContent div#CoinModalDiv {
-  color: red !important;
 }
 
 body main #coinsDiv {
@@ -115,6 +115,13 @@ body main #coinsDiv #aboutDiv {
 body main #coinsDiv #aboutDiv p {
   height: 500px;
   padding: 20px;
+  font-size: 30px;
+  text-align: left;
+  line-height: 1.8em;
+}
+
+body main #coinsDiv #aboutDiv p span {
+  margin-left: 31%;
 }
 
 body main #coinsDiv #aboutDiv p #selfImg {
@@ -229,15 +236,21 @@ body main #coinsDiv .slider.round:before {
 }
 
 @media only screen and (max-width: 768px) {
-  body #MainHeader {
-    font-size: 100px;
+  body #coinsDiv .card {
+    margin: 40px;
   }
-  body header div.divTopBar ul {
-    font-size: 18px;
-  }
-  body header #searchInp {
-    margin-right: 27%;
-    margin-bottom: 20px;
-  }
+}
+
+body #MainHeader {
+  font-size: 100px;
+}
+
+body header div.divTopBar ul {
+  font-size: 18px;
+}
+
+body header #searchInp {
+  margin-right: 27%;
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=style.css.map */
