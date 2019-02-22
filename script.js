@@ -13,8 +13,7 @@ $("#searchId").on("click", function () {
 
         if (userSearch == arr[i].symbol) {
             var coinSearch = arr[i]
-            $(".card").remove()
-            $("#coinsDiv").append(`<div class="card" style="width: 18rem;">
+            $("#coinsDiv").html(`<div class="card" style="width: 18rem;">
                                     <div class="card-body">
                                     <h5 class="card-title">${coinSearch.id}  - ${coinSearch.symbol}</h5>
                                     <label class="switch">
@@ -27,7 +26,7 @@ $("#searchId").on("click", function () {
                                     </div>
                                 </div>`);
 
-                          
+  
         }  
        
         
@@ -286,10 +285,9 @@ $("#searchId").on("click", function () {
             url: "about.html",
 
             success: function (resualt) {
-                $(".card").remove()
-                $("#chartContainer").remove()
+                
 
-                $("#coinsDiv").append(`<div id="AboutSmallDiv">${resualt}</div>`)
+                $("#coinsDiv").html(`<div id="AboutSmallDiv">${resualt}</div>`)
 
             }
         })
@@ -306,10 +304,9 @@ $("#searchId").on("click", function () {
             url: "RealTimeReports.html",
 
             success: function (resualt) {
-                $(".card").remove()
-                $("#AboutSmallDiv").remove()
+              
 
-                $("#coinsDiv").append(resualt)
+                $("#coinsDiv").html(resualt)
 
                 for (let i = 0; i < arr.length; i++) {
 
