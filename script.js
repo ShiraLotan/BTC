@@ -3,8 +3,40 @@ $(document).ready(function () {
     var favorite = [];
     var FavoriteSymbols = [];
 
+    $("#HomePage").on("click",function(){
+      
+})
 
-   
+$("#searchId").on("click", function () {
+    var userSearch = $("#searchInp").val().toUpperCase()
+    for (let i = 0; i < arr.length; i++) {
+
+        if (userSearch == arr[i].symbol) {
+            var coinSearch = arr[i]
+            $(".card").remove()
+            $("#coinsDiv").append(`<div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title">${coinSearch.id}  - ${coinSearch.symbol}</h5>
+                                    <label class="switch">
+                                    <input type="checkbox" id="checkbox" class="${coinSearch.id}" value="false">
+                                    <span class="slider round"></span>
+                                    <button href="#" class="btn btn-primary collapsible ${coinSearch.id}" data-toggle="collapse">More Info</button>
+                                    <div class="content">
+                                        <p class="${coinSearch.id}"></p>
+                                        </div>
+                                    </div>
+                                </div>`);
+
+                          
+        }  
+       
+        
+            
+
+    }
+});
+  
+
 
     /****** Ajax Progress Bar Functions******/
     $(document).ajaxStart(function () {
@@ -25,7 +57,18 @@ $(document).ready(function () {
         var AjaxDate = Date.now()
         return AjaxDate
     });
+
+
+
+
+
+
+
+
+
+
     /****** Ajax Homepage Append Coins******/
+
     $.ajax({
 
         type: "GET",
@@ -52,8 +95,15 @@ $(document).ready(function () {
 
 
             }
-           
-  
+            /*******Go To Home Page Nav Bar Button *******/
+            $("#HomePage").on("click",function(){
+                location.reload();
+
+            })
+            /*******End Go To Home Page Nav Bar Button *******/
+
+                
+
             /***Toggle input true or false****/
             $("input").on("change", function () {
                 if ($(this).is(':checked')) {
@@ -61,7 +111,7 @@ $(document).ready(function () {
 
 
 
-                    
+
 
                     let CardFavorite = event.srcElement.parentElement.children[2].classList[3];
                     // console.log(favorite)
@@ -94,6 +144,7 @@ $(document).ready(function () {
                             $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}<input type="checkbox" id="inpChbx" checked></div>`)
 
                         }
+
 
                         $("#modallink").click()
 
@@ -143,7 +194,7 @@ $(document).ready(function () {
 
 
             ///***End Toggle input true or false****/
-            
+
 
 
             /****** More Info Button******/
@@ -212,7 +263,7 @@ $(document).ready(function () {
                     /****** End Ajax More Info Request******/
                 }
 
-              
+
 
 
             })
@@ -228,7 +279,25 @@ $(document).ready(function () {
 
     })
 
-   
+    $("#about").on("click", function () {
+
+        $.ajax({
+            type: "GET",
+            url: "about.html",
+
+            success: function (resualt) {
+                $(".card").remove()
+                $("#chartContainer").remove()
+
+                $("#coinsDiv").append(`<div id="AboutSmallDiv">${resualt}</div>`)
+
+            }
+        })
+
+
+
+
+    })
 
     $("#realTimeReports").on("click", function () {
 
@@ -238,6 +307,8 @@ $(document).ready(function () {
 
             success: function (resualt) {
                 $(".card").remove()
+                $("#AboutSmallDiv").remove()
+
                 $("#coinsDiv").append(resualt)
 
                 for (let i = 0; i < arr.length; i++) {
@@ -250,19 +321,61 @@ $(document).ready(function () {
                     }
                 }
                 /*******Start Coins Table ******/
-                // $(document).on("change ",function(){
 
 
-
+                setInterval(function(){  },2000)
                 $.ajax({
                     type: "GET",
                     url: `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${FavoriteSymbols[0]},${FavoriteSymbols[1]},${FavoriteSymbols[2]},${FavoriteSymbols[3]},${FavoriteSymbols[4]}&tsyms=USD`,
-
+               
                     success: function (resualt) {
-                        // console.log(resualt.FavoriteSymbols[0].USD)
+                        // console.log(resualt[FavoriteSymbols.length])
+                        if(FavoriteSymbols.length==0){
+                            alert("Please Choose At Least One Coin To Show In The Graph")
+                            $("#HomePage").click()
+                        }else{
 
+                     function SetCoin0(){
+                        if(resualt[FavoriteSymbols[0]]==undefined){
+                           return 0
+                        }else{
+                            return resualt[FavoriteSymbols[0]].USD
+                        }
+                    }
 
+                    function SetCoin1(){
+                        if(resualt[FavoriteSymbols[1]]==undefined){
+                           return 0
+                        }else{
+                            return resualt[FavoriteSymbols[1]].USD
+                        }
+                    }
+
+                    function SetCoin2(){
+                        if(resualt[FavoriteSymbols[2]]==undefined){
+                           return 0
+                        }else{
+                            return resualt[FavoriteSymbols[2]].USD
+                        }
+                    }
+
+                    function SetCoin3(){
+                        if(resualt[FavoriteSymbols[3]]==undefined){
+                           return 0
+                        }else{
+                            return resualt[FavoriteSymbols[3]].USD
+                        }
+                    }
+
+                    function SetCoin4(){
+                        if(resualt[FavoriteSymbols[4]]==undefined){
+                           return 0
+                        }else{
+                            return resualt[FavoriteSymbols[4]].USD
+                        }
+                    }
                         /******CHART ********/
+
 
                         var options = {
                             exportEnabled: true,
@@ -277,14 +390,7 @@ $(document).ready(function () {
                                 title: "Time"
                             },
 
-                            axisY2: {
-                                title: " Current Price",
-                                titleFontColor: "#C0504E",
-                                lineColor: "#C0504E",
-                                labelFontColor: "#C0504E",
-                                tickColor: "#C0504E",
-                                includeZero: false
-                            },
+                         
                             toolTip: {
                                 shared: true
                             },
@@ -299,12 +405,14 @@ $(document).ready(function () {
                                     xValueFormatString: "MMM YYYY",
                                     yValueFormatString: "#,##0 Units",
                                     dataPoints: [{
-                                            x: new Date(),
-                                            y: 120
+                                            x: new Date().getSeconds(),
+                                            y: SetCoin0()
+
                                         },
 
                                     ]
                                 },
+                                
                                 {
                                     type: "spline",
                                     name: `${FavoriteSymbols[1]}`,
@@ -313,8 +421,9 @@ $(document).ready(function () {
                                     xValueFormatString: "MMM YYYY",
                                     yValueFormatString: "$#,##0.#",
                                     dataPoints: [{
-                                            x: new Date(),
-                                            y: 19034.5
+                                            x: new Date().getSeconds(),
+                                            y: SetCoin1()
+
                                         },
 
                                     ]
@@ -326,8 +435,9 @@ $(document).ready(function () {
                                     xValueFormatString: "MMM YYYY",
                                     yValueFormatString: "$#,##0.#",
                                     dataPoints: [{
-                                            x: new Date(),
-                                            y: 19034.5
+                                            x: new Date().getSeconds(),
+                                            y: SetCoin2()
+
                                         },
 
                                     ]
@@ -339,8 +449,9 @@ $(document).ready(function () {
                                     xValueFormatString: "MMM YYYY",
                                     yValueFormatString: "$#,##0.#",
                                     dataPoints: [{
-                                            x: new Date(),
-                                            y: 19034.5
+                                            x: new Date().getSeconds(),
+                                            y: SetCoin3()
+
                                         },
 
                                     ]
@@ -352,15 +463,23 @@ $(document).ready(function () {
                                     xValueFormatString: "MMM YYYY",
                                     yValueFormatString: "$#,##0.#",
                                     dataPoints: [{
-                                            x: new Date(),
-                                            y: 19034.5
+                                            x: new Date().getSeconds(),
+                                            y: SetCoin4()
+
                                         },
 
                                     ]
                                 }
                             ]
                         };
+
+                  
+
                         $("#chartContainer").CanvasJSChart(options);
+
+
+                   
+
 
                         function toggleDataSeries(e) {
                             if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
@@ -373,10 +492,11 @@ $(document).ready(function () {
 
 
 
-
+                    }
                         /******End CHART *********/
                     }
                 })
+            
                 // })
                 /*******End Start Coins Table ******/
 
