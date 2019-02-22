@@ -1,4 +1,7 @@
+
 body{
+  
+
     background-image: url("./1.jpg");
     background-attachment: fixed;
     background-position: center;
@@ -75,9 +78,18 @@ body{
                
                     
     main{
+        div.modal{
+            background-color: red !important;
+        }
+
         #coinsDiv{
             margin-top: 20px;
             text-align: center;
+
+
+
+
+
             .card{
                 display: inline-block;
                 margin-right: 20px;
@@ -90,14 +102,7 @@ body{
             }
         
         }
-        #ex1{
-
-            #modalContent{
-                div#CoinModalDiv{
-                    color: red !important;
-                }
-            }
-        }
+       
 
     #coinsDiv{
         #aboutDiv{

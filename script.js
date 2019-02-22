@@ -3,9 +3,7 @@ $(document).ready(function () {
     var favorite = [];
     var FavoriteSymbols = [];
 
-    $("#HomePage").on("click",function(){
-      
-})
+ 
 
 $("#searchId").on("click", function () {
     var userSearch = $("#searchInp").val().toUpperCase()
@@ -26,10 +24,168 @@ $("#searchId").on("click", function () {
                                     </div>
                                 </div>`);
 
+                                arr=[];
+                                arr.push(obj(coinSearch.id, coinSearch.symbol))
   
         }  
        
-        
+            /***Toggle input true or false****/
+            $("input").on("change", function () {
+                if ($(this).is(':checked')) {
+                    $(this).attr('value', 'true')
+
+
+
+
+
+                    let CardFavorite = event.srcElement.parentElement.children[2].classList[3];
+                    // console.log(favorite)
+
+
+                    if (favorite.length < 5) {
+                        favorite.push(CardFavorite)
+
+                        $('input[type=checkbox]').click(function () {
+                            if ($(this).is(":not(:checked)")) {
+                                $(this).prop('value', 'false');
+                            }
+                            let coinOut = this.classList[0]
+                            for (let i = 0; i < favorite.length; i++) {
+                                if (coinOut == favorite[i]) {
+                                    let index = i
+                                    favorite.splice(index, 1)
+                                }
+                            }
+                            //    console.log(coinOut)
+                        })
+                        // console.log(favorite)
+                    } else {
+                        /****************Modal window *********************/
+                        // console.log(this.parentElement.children[3].children[0].classList[0])
+
+                        let currentCoin = this.parentElement.children[3].children[0].classList[0];
+                        $("#modalContent").html(`If you would like to add coin name: ${currentCoin} please uncheck one coine instead:`)
+                        for (let i = 0; i < favorite.length; i++) {
+                            $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}<input type="checkbox" id="inpChbx" checked></div>`)
+
+                        }
+
+
+                        $("#modallink").click()
+
+                        $(".close-modal").on("click", function () {
+                            //   console.log(currentCoin)
+
+                            $(`input:checkbox.${currentCoin}`).prop('checked', false)
+                        })
+
+                        $("input").on("change", function () {
+                            let removeCoin = this.parentElement.classList[0]
+
+                            for (let i = 0; i < favorite.length; i++) {
+                                if (removeCoin == favorite[i]) {
+                                    var index = i
+                                    favorite.splice(index, 1)
+                                    favorite.push(currentCoin)
+                                    // console.log(favorite)
+
+                                    alert(`${removeCoin} Has Been Removed`)
+                                    $("#AcloseModal").click()
+
+                                    let removedElement = $(`input#checkbox.${removeCoin}:checked`)
+
+                                    $(removedElement).prop('checked', false)
+
+
+                                    // console.log(removedElement)
+                                }
+                            }
+                        })
+                        /**************** End Modal window *********************/
+
+                    }
+
+
+
+                } else {
+                    // $(input).on("change",function(){
+                    //     $(this).attr('value','false')
+                    // })
+
+                }
+
+
+            })
+          /****** More Info Button******/
+
+          $(".collapsible").on("click", function (event) {
+            let dateNow = new Date()
+
+            let coinID = event.target.classList[3]
+            let SavedCoin = JSON.parse(localStorage.getItem(`${coinID}`))
+            console.log(event)
+
+            const TwoMin = 120000;
+            // console.log(SavedCoin)
+            // console.log(dateNow)
+
+
+            /********Check if user already clicked the coin *******/
+            if (SavedCoin !== null && dateNow - SavedCoin.AjaxDate < 120000) {
+                console.log("From Storage")
+
+                const element = event.target.parentElement.children[3]
+                $(element).toggle("slow")
+
+                $(`p.${SavedCoin.id}`).html(`<div><img src=${SavedCoin.image.small}></br><span>USD: ${SavedCoin.market_data.current_price.usd}$</span></br><span>EURO: ${SavedCoin.market_data.current_price.eur}&#8364</span></br><span>ILS: ${SavedCoin.market_data.current_price.usd}&#8362</span></div>`)
+
+            }
+
+            /********End Check if user already clicked the coin *******/
+            else {
+
+                /********Take info from API if user not clicked the coin *******/
+
+                const element = event.target.parentElement.children[3]
+                $(element).toggle("slow")
+                let coinID = event.target.classList[3]
+
+                /****** Ajax More Info Request******/
+                $.ajax({
+
+                    type: "GET",
+                    url: `https://api.coingecko.com/api/v3/coins/${coinID}`,
+
+
+                    success: function (resualt) {
+
+                        if (resualt.id == coinID) {
+                            $(`p.${coinID}`).html(`<div><img src=${resualt.image.small}></br><span>USD: ${resualt.market_data.current_price.usd}$</span></br><span>EURO: ${resualt.market_data.current_price.eur}&#8364</span></br><span>ILS: ${resualt.market_data.current_price.usd}&#8362</span></div>`)
+
+                            resualt.AjaxDate = Date.now()
+
+                            localStorage.setItem(`${coinID}`, JSON.stringify(resualt))
+
+                            console.log("From Ajax")
+
+                        }
+
+                    },
+
+                    error: function (resualt) {
+                        alert(`Something went wrong! Please try again. Problem number ${resualt.error}`) /***** Add a resonable message *****/
+                    }
+
+
+
+                })
+                /****** End Ajax More Info Request******/
+            }
+
+
+
+
+        })
             
 
     }
@@ -134,6 +290,10 @@ $("#searchId").on("click", function () {
                         })
                         // console.log(favorite)
                     } else {
+
+
+
+
                         /****************Modal window *********************/
                         // console.log(this.parentElement.children[3].children[0].classList[0])
 
@@ -141,6 +301,7 @@ $("#searchId").on("click", function () {
                         $("#modalContent").html(`If you would like to add coin name: ${currentCoin} please uncheck one coine instead:`)
                         for (let i = 0; i < favorite.length; i++) {
                             $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}<input type="checkbox" id="inpChbx" checked></div>`)
+                            
 
                         }
 
@@ -372,7 +533,6 @@ $("#searchId").on("click", function () {
                         }
                     }
                         /******CHART ********/
-
 
                         var options = {
                             exportEnabled: true,
