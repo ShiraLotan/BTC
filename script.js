@@ -2,6 +2,7 @@ $(document).ready(function () {
     var arr = [];
     var favorite = [];
     var FavoriteSymbols = [];
+    var idInterva;
 
 
 
@@ -66,7 +67,11 @@ $(document).ready(function () {
                         let currentCoin = this.parentElement.children[3].children[0].classList[0];
                         $("#modalContent").html(`If you would like to add coin name: ${currentCoin} please uncheck one coine instead:`)
                         for (let i = 0; i < favorite.length; i++) {
-                            $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}<input type="checkbox" id="inpChbx" checked></div>`)
+                            $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}
+                            <label class="switch">
+                            <input type="checkbox" id="inpChbx" checked>
+                            <span class="slider round"></span></label>
+                            </div>`)
 
                         }
 
@@ -80,7 +85,7 @@ $(document).ready(function () {
                         })
 
                         $("input").on("change", function () {
-                            let removeCoin = this.parentElement.classList[0]
+                            let removeCoin = this.parentElement.parentElement.classList[0]
 
                             for (let i = 0; i < favorite.length; i++) {
                                 if (removeCoin == favorite[i]) {
@@ -300,7 +305,11 @@ $(document).ready(function () {
                         let currentCoin = this.parentElement.children[3].children[0].classList[0];
                         $("#modalContent").html(`If you would like to add coin name: ${currentCoin} please uncheck one coine instead:`)
                         for (let i = 0; i < favorite.length; i++) {
-                            $("#modalContent").append(`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}<input type="checkbox" id="inpChbx" checked></div>`)
+                            $("#modalContent").append((`<div id="CoinModalDiv" class="${favorite[i]}">${favorite[i]}
+                            <label class="switch">
+                            <input type="checkbox" id="inpChbx" checked>
+                            <span class="slider round"></span></label>
+                            </div>`))
 
 
                         }
@@ -315,7 +324,7 @@ $(document).ready(function () {
                         })
 
                         $("input").on("change", function () {
-                            let removeCoin = this.parentElement.classList[0]
+                            let removeCoin = this.parentElement.parentElement.classList[0]
 
                             for (let i = 0; i < favorite.length; i++) {
                                 if (removeCoin == favorite[i]) {
@@ -440,16 +449,13 @@ $(document).ready(function () {
     })
 
     $("#about").on("click", function () {
-
+        clearInterval(idInterva)
         $.ajax({
             type: "GET",
             url: "about.html",
 
             success: function (resualt) {
-
-
                 $("#coinsDiv").html(`<div id="AboutSmallDiv">${resualt}</div>`)
-
             }
         })
 
@@ -485,8 +491,9 @@ $(document).ready(function () {
                     var arrCoin4 = []
                     var arrCoin5 = []
 
+                    
 
-                    setInterval(function () {
+                 idInterva  = setInterval(function () {
                         $.ajax({
                             type: "GET",
                             url: `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${FavoriteSymbols[0]},${FavoriteSymbols[1]},${FavoriteSymbols[2]},${FavoriteSymbols[3]},${FavoriteSymbols[4]}&tsyms=USD`,
@@ -649,7 +656,6 @@ $(document).ready(function () {
                                 }
                             ]
                         };
-
 
 
                         $("#chartContainer").CanvasJSChart(options);
